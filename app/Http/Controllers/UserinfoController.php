@@ -2,128 +2,94 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+
 use App\Models\Userinfo;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
 
 class UserinfoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        // $client = new Client();
-        // $uri = "http://10.71.31.169:3000/user_informations";
-        // $response = $client->request('GET', $uri);
-        // $userinfos = dd($response->getBody()->getContents());
-
-        // $userinfos = "http://10.71.31.169:3000/user_informations";
+        $search = $request['search'] ?? "";
+        $data = Userinfo::where('first_name', 'LIKE','%'.$search.'%')->get();
         $userinfos = Userinfo::all();
-
         return Inertia::render('userinfos/index',['userinfos' => $userinfos])->with('status', 'success');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return Inertia::render('userinfos/create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $uid = Auth::user()->id;
-        // $user = User::find($uid);
-
-        $validator = validator::make($request->all(),[
+        $this->validate($request, [
             'first_name' => 'required|min:3',
             'middle_name' => 'required|min:3',
             'last_name' => 'required|min:3',
             'contact' => 'required|min:9|max:10',
             'gender' => 'required',
-            'profile_pic' => 'required',
-            'user_id' => 'required',
+            'profile_pic' => '',
         ]);
-        if ($validator->fails()) {
-            if ($request->ajax()) {
-                return response()->json(['result' => 'error', 'message' => $validator->errors()->all()]);
-            } else {
-                return redirect()->route('transactions.create')
-                ->withErrors($validator)
-                ->withInput();
-            }
-        }
+        /* $imageName = time().'.'.$request->image->extension();
+        $request->image->move(public_path('images'), $imageName); */
 
-        Userinfo::create($request->all());
-        return Inertia::render('userinfos/Index')->with('Success', 'Information Added Successfully');
+        // $hashName = Hash::make($imageName);
+        $data = array();
+        $data['first_name'] = $request->first_name;
+        $data['middle_name'] = $request->middle_name;
+        $data['last_name'] = $request->last_name;
+        $data['contact'] = $request->contact;
+        $data['gender'] = $request->gender;
+        $data['profile_pic'] = $request->profile_pic;
+        $data['user_id'] = Auth::user()->id;
+
+        DB::table('userinfos')->insert($data);
+        return Inertia::render('userinfos/Index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Userinfo  $userinfo
-     * @return \Illuminate\Http\Response
-     */
     public function show(Userinfo $userinfo)
     {
         return Inertia::render('userinfos/show', ['userinfo'=>$userinfo]);
         // return Inertia::render('userinfos/show', ['userinfo'=>Userinfo::findOrFail('id')]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Userinfo  $userinfo
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Userinfo $userinfo)
     {
         return Inertia::render('userinfos/edit', ['userinfo'=>$userinfo]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Userinfo  $userinfo
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Userinfo $userinfo)
     {
-        $request->validate([
+        $this->validate($request, [
             'first_name' => 'required|min:3',
             'middle_name' => 'required|min:3',
             'last_name' => 'required|min:3',
             'contact' => 'required|min:9|max:10',
             'gender' => 'required',
-            'profile_pic' => 'required',
+            'profile_pic' => '',
         ]);
+        /* $imageName = time().'.'.$request->image->extension();
+        $request->image->move(public_path('images'), $imageName); */
+
+        // $hashName = Hash::make($imageName);
+        $data = array();
+        $data['first_name'] = $request->first_name;
+        $data['middle_name'] = $request->middle_name;
+        $data['last_name'] = $request->last_name;
+        $data['contact'] = $request->contact;
+        $data['gender'] = $request->gender;
+        $data['profile_pic'] = $request->profile_pic;
+        $data['user_id'] = Auth::user()->id;
 
         $userinfo->update($request->all());
-        return Inertia::render('userinfos/Index')->with('Success', 'Information Updated successfully');
+        return Inertia::render('userinfos/Index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Userinfo  $userinfo
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Userinfo $userinfo)
     {
         $userinfo->delete();

@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('contact');
             $table->enum('gender',['Male', 'Female', 'Other']);
-            $table->string('profile_pic');
-            $table->unsignedBigInteger('user_id')->index();
+            $table->string('profile_pic')->nullable();
+            $table->unsignedBigInteger('user_id')->unique();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

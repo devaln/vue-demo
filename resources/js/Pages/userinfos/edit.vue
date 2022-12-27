@@ -1,5 +1,5 @@
 <script setup>
-import BreezeAuthenticatedLayout from '@/Layouts/Authenticatedlayout.vue';
+import BreezeAuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import BreezeInputError from '@/Components/InputError.vue';
 import BreezeLabel from '@/Components/InputLabel.vue';
 import BreezeInput from '@/Components/TextInput.vue';
@@ -54,7 +54,7 @@ const submit = () => {
 
                                 <BreezeLabel for="first_name"/><b>First Name :- </b>
 
-                                <BreezeInput id="first_name" type="text" class="mt-1 block w-full" v-model="form.first_name" required />
+                                <BreezeInput id="first_name" type="text" name="first_name" class="mt-1 block w-full" v-model="form.first_name" required />
                                 <BreezeInputError className="text-red-600" v-if="form.errors.first_name">
                                     {{ form.errors.first_name }}
                                 </BreezeInputError>
@@ -64,7 +64,7 @@ const submit = () => {
 
                                 <BreezeLabel for="middle_name" /><b>Middle Name :- </b>
 
-                                <BreezeInput id="middle_name" type="text" class="mt-1 block w-full" v-model="form.middle_name" required />
+                                <BreezeInput id="middle_name" type="text" name="middle_name" class="mt-1 block w-full" v-model="form.middle_name" required />
 
                                 <BreezeInputError className="text-red-600" v-if="form.errors.middle_name">
                                     {{ form.errors.middle_name }}
@@ -75,7 +75,7 @@ const submit = () => {
 
                                 <BreezeLabel for="last_name"/><b>Last Name :- </b>
 
-                                <BreezeInput id="last_name" type="text" class="mt-1 block w-full" v-model="form.last_name" required />
+                                <BreezeInput id="last_name" type="text" name="last_name" class="mt-1 block w-full" v-model="form.last_name" required />
 
                                 <BreezeInputError className="text-red-600" v-if="form.errors.last_name">
                                     {{ form.errors.last_name }}
@@ -86,7 +86,7 @@ const submit = () => {
 
                                 <BreezeLabel for="contact" /><b>Contact :- </b>
 
-                                <BreezeInput id="contact" type="number" max-length="10" class="mt-1 block w-full" v-model="form.contact" required />
+                                <BreezeInput id="contact" type="number" max-length="10" name="contact" class="mt-1 block w-full" v-model="form.contact" required />
 
                                 <BreezeInputError className="text-red-600" v-if="form.errors.contact">
                                     {{ form.errors.contact }}
@@ -97,9 +97,9 @@ const submit = () => {
 
                                 <BreezeLabel for="gender"/><b>Gender :- </b>&nbsp;&nbsp;
 
-                                <input id="gender" type="radio" v-model="form.gender" value="Male" required />&nbsp;Male&nbsp;&nbsp;
-                                <input id="gender" type="radio" v-model="form.gender" value="Female" required />&nbsp;Female&nbsp;&nbsp;
-                                <input id="gender" type="radio" v-model="form.gender" value="Other" required />&nbsp;Other&nbsp;&nbsp;
+                                <input id="gender" type="radio" v-model="form.gender" name="gender" value="Male" required />&nbsp;Male&nbsp;&nbsp;
+                                <input id="gender" type="radio" v-model="form.gender" name="gender" value="Female" required />&nbsp;Female&nbsp;&nbsp;
+                                <input id="gender" type="radio" v-model="form.gender" name="gender" value="Other" required />&nbsp;Other&nbsp;&nbsp;
 
                                 <BreezeInputError className="text-red-600" v-if="form.errors.gender">
                                     {{ form.errors.gender }}
@@ -110,7 +110,7 @@ const submit = () => {
 
                                 <BreezeLabel for="profile_pic" value="profile_pic" />Profile
 
-                                <BreezeInput id="profile_pic" type="file" class="mt-1 block w-full" v-model="form.profile_pic" required />
+                                <BreezeInput id="profile_pic" type="file" name="" class="mt-1 block w-full" v-model="form.profile_pic" required />
 
                                 <BreezeInputError className="text-red-600" v-if="form.errors.profile_pic">
                                     {{ form.errors.profile_pic }}

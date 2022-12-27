@@ -21,3 +21,5 @@ createInertiaApp({
 });
 
 InertiaProgress.init({ color: '#4B5563' });
+
+Vue.component('autocomplete-component', require('./components/AutocompleteComponent.vue').default);
