@@ -17,6 +17,10 @@ const form = useForm({
 
 const submit = () => {
     form.post(route('userinfos.store'));
+    headers: {
+        'content-type': 'multipart/form-data',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+    }
 };
 
 </script>
@@ -58,7 +62,7 @@ const submit = () => {
                                 <div className="mb-4">
                                     <BreezeInputLabel for="middle_name" /><b>Middle Name :- </b>
 
-                                    <BreezeInput id="middle_name" type="text" name="middle_name" class="mt-1 block w-full" v-model="form.middle_name" required />
+                                    <BreezeInput id="middle_name" type="text" name="middle_name" class="mt-1 block w-full" v-model="form.middle_name" required autocomplete="middle_name" autofocus />
                                     <span className="text-red-600" v-if="form.errors.middle_name">
                                         {{ form.errors.middle_name }}
                                     </span>
@@ -100,7 +104,7 @@ const submit = () => {
                                 <!-- Profile Picture -->
                                 <div className="mb-4">
                                     <BreezeInputLabel for="profile_pic" /><b>Profile Picture :- </b>
-                                    <input id="profile_pic" type="file" name="profile_pic" class="mt-1 block w-full" v-on:change="onchange" />
+                                    <BreezeInput id="profile_pic" type="file" name="profile_pic" class="mt-1 block w-full" v-model="form.profile_pic" />
 
                                     <span className="text-red-600" v-if="form.errors.profile_pic">
                                         {{ form.errors.profile_pic }}
