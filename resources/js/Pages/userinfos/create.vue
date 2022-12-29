@@ -14,13 +14,10 @@ const form = useForm({
     profile_pic: '',
     user_id: '',
 });
-
 const submit = () => {
-    form.post(route('userinfos.store'));
-    headers: {
-        'content-type': 'multipart/form-data',
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-    }
+    form.post(route("userinfos.store"), {
+        forceFormData: true,
+    });
 };
 
 </script>
@@ -104,8 +101,8 @@ const submit = () => {
                                 <!-- Profile Picture -->
                                 <div className="mb-4">
                                     <BreezeInputLabel for="profile_pic" /><b>Profile Picture :- </b>
-                                    <BreezeInput id="profile_pic" type="file" name="profile_pic" class="mt-1 block w-full" v-model="form.profile_pic" />
-
+                                    <!-- <input id="profile_pic" type="file" name="profile_pic" class="mt-1 block w-full" v-on="onFileChange" /> -->
+                                    <input type="file" name="profile_pic" @input="form.profile_pic = $event.target.files[0]" />
                                     <span className="text-red-600" v-if="form.errors.profile_pic">
                                         {{ form.errors.profile_pic }}
                                     </span>

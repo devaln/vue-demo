@@ -23,6 +23,7 @@ class UserinfoFactory extends Factory
             'last_name' => fake()->lastName(),
             'contact' => fake()->numerify('##########'),
             'gender' => fake()->randomElement(['Male', 'Female']),
+            'profile_pic' => fake()->imageUrl(),
             'user_id' => fake()->unique()->numberBetween(1, User::count()),
         ];
     }

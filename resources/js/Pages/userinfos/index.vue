@@ -1,6 +1,8 @@
 <script setup>
 import BreezeAuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import BreezeInput from '@/Components/TextInput.vue';
+import { Inertia } from "@inertiajs/inertia";
+import { watch } from "vue";
+import { ref } from "vue";
 // import { Pagination } from 'laravel-vue-pagination';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 
@@ -15,6 +17,17 @@ function destroy(id) {
         form.delete(route('userinfos.destroy', id));
     }
 }
+
+let search = ref('');
+watch(search, (value) => {
+  Inertia.get(
+    "/userinfos",
+    { search: value },
+    {
+      preserveState: true,
+    }
+  );
+});
 /* Pagination */
 
 </script>
@@ -23,24 +36,17 @@ function destroy(id) {
     <Head title="Dashboard" />
 
     <BreezeAuthenticatedLayout>
-        <template #header>
+        <template #header >
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 User Informations
             </h2>
-        </template>
-
-        <div class="text-right mr-16 mt-4">
-            <div class="">
-                <form action="">
-                    <div class="form-group">
-                        <BreezeInput type="text" class="form-control" id="search" name="search" v-model="search" placeholder="eg: rupesh bagwat" />
-                        <button type="search" for="search" class="text-white  bg-green-600 ">Search</button>
-                    </div>
-                </form>
+            <!-- search Input -->
+            <div align="right">
+                <input type="text" v-model="search" placeholder="Search..." class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 " />
             </div>
-        </div>
-        <div class="py-12">
-            <div class="max-w-full mx-auto sm:px-6 lg:px-12">
+        </template>
+        <div class="py-6">
+            <div class="max-w-fit mx-auto sm:px-6 lg:px-12">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-8 bg-white border-b border-gray-200">
 
@@ -66,24 +72,24 @@ function destroy(id) {
                             <tbody>
                                 <tr v-for="userinfo in userinfos">
                                     <td className="border px-4 py-2">{{ userinfo.id }}</td>
-                                    <td className="border px-4 py-2"><img :src="`/images/${userinfo.profile_pic}`" /></td>
+                                    <td className="border px-4 py-2"><img :src="`${userinfo.profile_pic}`" /></td>
                                     <td className="border px-4 py-2">{{ userinfo.first_name }}</td>
                                     <!-- <td className="border px-4 py-2">{{ userinfo.middle_name }}</td> -->
                                     <td className="border px-4 py-2">{{ userinfo.last_name }}</td>
                                     <td className="border px-4 py-2">{{ userinfo.contact }}</td>
                                     <td className="border px-4 py-2">{{ userinfo.gender }}</td>
-                                    <td className="border px-4 py-2">
+                                    <td className="border px-3 py-2">
                                       <!-- Edit Button -->
                                       <Link tabIndex="1" className="px-1 py-1 text-sm text-white bg-slate-400 rounded" :href="route('userinfos.show', userinfo.id)"> Show</Link>&nbsp;
                                       <!-- Show Button -->
-                                      <Link tabIndex="1" className="px-1 py-1 text-sm text-white bg-blue-500 rounded" :href="route('userinfos.edit', userinfo.id)"> Edit </Link>&nbsp;
+                                      <Link tabIndex="1" className="px-2 py-1 text-sm text-white bg-blue-500 rounded" :href="route('userinfos.edit', userinfo.id)"> Edit </Link>&nbsp;
                                       <!-- Delete button -->
-                                      <button @click="destroy(userinfo.id)" tabIndex="-1" type="button" className="mx-1 px-0 py-0 text-sm text-white bg-red-500 rounded" >Delete</button>
+                                      <button @click="destroy(userinfo.id)" tabIndex="-1" type="button" className="mx-1 px-1 py-1 text-sm text-white bg-red-500 rounded" >Delete</button>
                                     </td>
                                 </tr>
                             </tbody>
+                            <pagination :data="tabledata" @pagination-change-page="getResults"></pagination>
                         </table>
-                        <pagination :data="tabledata" @pagination-change-page="getResults"></pagination>
                     </div>
                 </div>
             </div>

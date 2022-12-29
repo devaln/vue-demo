@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\User;
 use App\Models\Userinfo;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -12,16 +12,15 @@ use Symfony\Component\Console\Input\Input;
 
 class UserinfoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $search = $request['search'] ?? "";
         if($search != ""){
-            $userinfos = Userinfo::Where('first_name','LIKE','%'.$search.'%')->orwhere('last_name', 'like', '%'.$search.'&')->get();
+            $userinfos = Userinfo::Where('first_name','LIKE','%'.$search.'%')->orWhere('last_name', 'LIKE', '%'.$search.'&')->get();
         }
         else{
             $userinfos = Userinfo::all();
         }
-        // $userinfos = Userinfo::latest()->get();
         return Inertia::render('userinfos/index',['userinfos' => $userinfos])->with('status', 'success');
     }
 
@@ -38,17 +37,13 @@ class UserinfoController extends Controller
             'last_name' => 'required|min:3',
             'contact' => 'required|min:9|max:10',
             'gender' => 'required',
-            // 'profile_pic' => '',
+            'profile_pic' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
 
         ]);
 
         $file = $request->profile_pic;
-        $name = '/profile_pic/' . uniqid() . '.' . $file->extension();
-        $file->storePubliclyAs('public', $name);
-        // $data['avatar'] = $name;
-        // $fileName = time().'.'.$request->profile_pic->extension();
-        // $request->profile_pic->move(public_path('images'), $fileName);
-        // $hashName = Hash::make($imageName);
+        $name = '/images/' .time(). uniqid() . '.' . $file->extension();
+        $file->move(public_path('images'), $name);
         $data = array();
         $data['first_name'] = $request->first_name;
         $data['middle_name'] = $request->middle_name;
