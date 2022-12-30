@@ -3,7 +3,8 @@ import BreezeAuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Inertia } from "@inertiajs/inertia";
 import { watch } from "vue";
 import { ref } from "vue";
-// import { Pagination } from 'laravel-vue-pagination';
+// import TailwindPagination from 'laravel-vue-pagination';
+import Footer from '@/Layouts/Footer.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 
 defineProps({
@@ -29,7 +30,11 @@ watch(search, (value) => {
   );
 });
 /* Pagination */
-
+const getResults = async (page = 1) => {
+    const response = await fetch(`/userinfos?page=${page}`);
+    laravelData.value = await response.json();
+}
+getResults();
 </script>
 
 <template>
@@ -37,7 +42,7 @@ watch(search, (value) => {
 
     <BreezeAuthenticatedLayout>
         <template #header >
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-bold text-xl text-gray-800 leading-tight">
                 User Informations
             </h2>
             <!-- search Input -->
@@ -46,7 +51,7 @@ watch(search, (value) => {
             </div>
         </template>
         <div class="py-6">
-            <div class="max-w-fit mx-auto sm:px-6 lg:px-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-12">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-8 bg-white border-b border-gray-200">
 
@@ -62,7 +67,6 @@ watch(search, (value) => {
                                     <th className="px-4 py-2 w-20">#ID</th>
                                     <th className="px-4 py-2">Profile</th>
                                     <th className="px-4 py-2">First Name</th>
-                                    <!-- <th className="px-4 py-2">Middle Name</th> -->
                                     <th className="px-4 py-2">Last Name</th>
                                     <th className="px-4 py-2">Contact</th>
                                     <th className="px-4 py-2">Gender</th>
@@ -72,9 +76,8 @@ watch(search, (value) => {
                             <tbody>
                                 <tr v-for="userinfo in userinfos">
                                     <td className="border px-4 py-2">{{ userinfo.id }}</td>
-                                    <td className="border px-4 py-2"><img :src="`${userinfo.profile_pic}`" /></td>
-                                    <td className="border px-4 py-2">{{ userinfo.first_name }}</td>
-                                    <!-- <td className="border px-4 py-2">{{ userinfo.middle_name }}</td> -->
+                                    <td className="border px-4 py-2"><img class="rounded-full border border-black" :src="`${userinfo.profile_pic}`" /></td>
+                                    <td className="border px-4 py-2">{{ userinfo.first_name}}</td>
                                     <td className="border px-4 py-2">{{ userinfo.last_name }}</td>
                                     <td className="border px-4 py-2">{{ userinfo.contact }}</td>
                                     <td className="border px-4 py-2">{{ userinfo.gender }}</td>
@@ -88,11 +91,12 @@ watch(search, (value) => {
                                     </td>
                                 </tr>
                             </tbody>
-                            <pagination :data="tabledata" @pagination-change-page="getResults"></pagination>
+                            <TailwindPagination :data="laravelData" @pagination-change-page="getResults" />
                         </table>
                     </div>
                 </div>
             </div>
         </div>
     </BreezeAuthenticatedLayout>
+    <Footer></Footer>
 </template>

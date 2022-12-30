@@ -32,10 +32,7 @@ const props = defineProps({
                             <thead>
                                 <tr className="bg-gray-100">
                                     <th className="px-4 py-2 w-20">No.</th>
-                                    <!-- <th className="px-4 py-2">E-mail</th> -->
-                                    <th className="px-4 py-2">First Name</th>
-                                    <th className="px-4 py-2">Middle Name</th>
-                                    <th className="px-4 py-2">Last Name</th>
+                                    <th className="px-4 py-2">Full Name</th>
                                     <th className="px-4 py-2">Contact</th>
                                     <th className="px-4 py-2">Gender</th>
                                     <th className="px-4 py-2">Profile</th>
@@ -44,10 +41,7 @@ const props = defineProps({
                             <tbody>
                                 <tr>
                                     <td className="border px-4 py-2">{{ userinfo.id }}</td>
-                                    <!-- <td className="border px-4 py-2">{{ userinfo.user.email }}</td> -->
-                                    <td className="border px-4 py-2">{{ userinfo.first_name }}</td>
-                                    <td className="border px-4 py-2">{{ userinfo.middle_name }}</td>
-                                    <td className="border px-4 py-2">{{ userinfo.last_name }}</td>
+                                    <td className="border px-4 py-2">{{ userinfo.first_name }}  {{ userinfo.middle_name }}  {{ userinfo.last_name }}</td>
                                     <td className="border px-4 py-2">{{ userinfo.contact }}</td>
                                     <td className="border px-4 py-2">{{ userinfo.gender }}</td>
                                     <td className="border px-4 py-2"><img :src="`${userinfo.profile_pic}`" /></td>

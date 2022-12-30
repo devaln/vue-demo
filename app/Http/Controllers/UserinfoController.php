@@ -8,20 +8,21 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\Console\Input\Input;
 
 class UserinfoController extends Controller
 {
     public function index(Request $request)
     {
+        $users = User::all();;
+
         $search = $request['search'] ?? "";
         if($search != ""){
-            $userinfos = Userinfo::Where('first_name','LIKE','%'.$search.'%')->orWhere('last_name', 'LIKE', '%'.$search.'&')->get();
+            $userinfos = Userinfo::Where('first_name','LIKE','%'.$search.'%')->orwhere('last_name', 'LIKE', '%'.$search.'&')->get();
         }
         else{
-            $userinfos = Userinfo::all();
+            $userinfos = Userinfo::paginate(10)->all();
         }
-        return Inertia::render('userinfos/index',['userinfos' => $userinfos])->with('status', 'success');
+        return Inertia::render('userinfos/index', ['userinfos' => $userinfos, 'users' => $users])->with('status', 'success');
     }
 
     public function create()
@@ -44,6 +45,7 @@ class UserinfoController extends Controller
         $file = $request->profile_pic;
         $name = '/images/' .time(). uniqid() . '.' . $file->extension();
         $file->move(public_path('images'), $name);
+
         $data = array();
         $data['first_name'] = $request->first_name;
         $data['middle_name'] = $request->middle_name;
@@ -54,7 +56,7 @@ class UserinfoController extends Controller
         $data['user_id'] = Auth::user()->id;
 
         DB::table('userinfos')->insert($data);
-        return Inertia::render('userinfos/Index');
+        return redirect()->route('userinfos.index')->with('Userinformations added successfully');
     }
 
     public function show(Userinfo $userinfo)
@@ -92,12 +94,12 @@ class UserinfoController extends Controller
         $data['user_id'] = Auth::user()->id;
 
         $userinfo->update($request->all());
-        return Inertia::render('userinfos/Index');
+        return redirect()->route('userinfos.index');
     }
 
     public function destroy(Userinfo $userinfo)
     {
         $userinfo->delete();
-        return Inertia::render('userinfos/Index', ['userinfo' => $userinfo])->with('Success', 'Information deleted successfully');
+        return redirect()->route('userinfos.index');
     }
 }
