@@ -19,9 +19,9 @@ class UserinfoFactory extends Factory
     {
         return [
             'first_name' => fake()->firstname(),
-            'middle_name' => fake()->firstName,
+            'middle_name' => fake()->firstNameMale(),
             'last_name' => fake()->lastName(),
-            'contact' => fake()->numerify('##########'),
+            'contact' => fake()->numerify('9#########'),
             'gender' => fake()->randomElement(['Male', 'Female']),
             'profile_pic' => fake()->imageUrl(),
             'user_id' => fake()->unique()->numberBetween(1, User::count()),

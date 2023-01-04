@@ -13,8 +13,6 @@ class UserinfoController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::all();;
-
         $search = $request['search'] ?? "";
         if($search != ""){
             $userinfos = Userinfo::Where('first_name','LIKE','%'.$search.'%')->orwhere('last_name', 'LIKE', '%'.$search.'&')->get();
@@ -22,7 +20,7 @@ class UserinfoController extends Controller
         else{
             $userinfos = Userinfo::paginate(10)->all();
         }
-        return Inertia::render('userinfos/index', ['userinfos' => $userinfos, 'users' => $users])->with('status', 'success');
+        return Inertia::render('userinfos/index', ['userinfos' => $userinfos])->with('status', 'success');
     }
 
     public function create()

@@ -44,7 +44,7 @@ const submit = () => {
 
                         <form name="createForm" @submit.prevent="submit" enctype="multipart/form-data">
                             <div className="flex flex-col">
-                                <strong class="text-gray-500 text-center mb-4">Fill the required details :- </strong>
+                                <strong class="text-gray-500 text-left mb-4">Fill the required details :- </strong><hr><br>
                                 <!-- First Name -->
                                 <div className="mb-4 mt-1 inline-flex space-x-20">
                                     <BreezeInputLabel for="first_name" /><b>First Name :- </b>
